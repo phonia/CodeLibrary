@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{86F186F8-BFA0-4AFB-AED5-51F22C5B9C07}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SoftWare", "SoftWare", "{900A3CB9-E081-4B9C-ABE9-981E7A27F436}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{F1953D3C-6B49-4180-801C-33CB49AA8002}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Store", "Store", "{3C3663D2-F524-4ABA-B43A-FE7ABD179DAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base.Infrastructure", "Base.Infrastructure\Base.Infrastructure.csproj", "{CBDB0A3D-FA49-4E46-ABD8-9B72EBF78DDC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBDB0A3D-FA49-4E46-ABD8-9B72EBF78DDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBDB0A3D-FA49-4E46-ABD8-9B72EBF78DDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBDB0A3D-FA49-4E46-ABD8-9B72EBF78DDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBDB0A3D-FA49-4E46-ABD8-9B72EBF78DDC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CBDB0A3D-FA49-4E46-ABD8-9B72EBF78DDC} = {86F186F8-BFA0-4AFB-AED5-51F22C5B9C07}
+	EndGlobalSection
+EndGlobal
