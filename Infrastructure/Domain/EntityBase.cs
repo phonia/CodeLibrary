@@ -25,7 +25,7 @@ namespace Infrastructure.Domain
 
         public abstract override int GetHashCode();
 
-        public abstract override bool Equals(object obj);
+        public abstract override bool Equals(object entity);
 
         public static bool operator ==(EntityBase entity1, EntityBase entity2)
         {
@@ -44,12 +44,7 @@ namespace Infrastructure.Domain
                 return false;
             }
 
-            if (entity1.GetHashCode() != entity2.GetHashCode())
-            {
-                return false;
-            }
-
-            return true;
+            return entity1.Equals(entity2);
         }
 
         public static bool operator !=(EntityBase entity1, EntityBase entity2)

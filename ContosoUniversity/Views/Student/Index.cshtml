@@ -1,0 +1,83 @@
+﻿@model IEnumerable<ContosoUniversity.Models.Student>
+
+@{
+    ViewBag.Title = "Students";
+}
+<script>
+    $(function () {
+        $("[name='Delete']").click(
+        function () {
+            if (confirm("确定要删除这条记录么？")) {
+                var stuid = $(this).attr("stuid");
+                var tr = $(this).parent().parent();
+
+                $.post("Delete/", { id: stuid }, function (data) {
+                    if (data == "-1") {
+                        alert("删除失败");
+                    }
+                    else {
+                        $(tr).remove();
+                        alert("删除成功");
+                    }
+
+                });
+            }
+        }
+        );
+    });
+</script>
+
+<h2>Students</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString") &nbsp;
+        <input type="submit" value="Search" /></p>
+}
+
+
+
+<table>
+   
+    <tr>
+    <th></th>
+    <th>
+        @Html.ActionLink("Last Name", "Index", new { sortOrder=ViewBag.NameSortParm })
+    </th>
+    <th>
+        First Name
+    </th>
+    <th>
+        @Html.ActionLink("Enrollment Date", "Index", new { sortOrder=ViewBag.DateSortParm })
+    </th>
+</tr>
+
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.StudentID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.StudentID }) |
+@*            @Html.ActionLink("Delete", "Delete", new { id=item.StudentID })*@
+            <a  name="Delete" stuid="@item.StudentID">Delete</a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstMidName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EnrollmentDate)
+        </td>
+    </tr>
+}
+
+</table>
