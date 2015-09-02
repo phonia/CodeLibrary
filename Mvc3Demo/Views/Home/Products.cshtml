@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Head{
+    <script type="text/javascript">
+        $(function () {
+            var grid = $('#grid').datagrid({
+                title: '产品管理',
+                iconCls: 'icon-save',
+                //method: 'post',
+                url: '/Home/LoadProductjson',
+                sortName: 'ID',
+                sortOrder: 'desc',
+                idField: 'ID',
+                pageSize: 10,
+                striped: true,
+                frozenColumns: [[
+                    { field: 'ck', checkbox: true }
+                ]],
+                columns: [[
+                            //{ field: 'ID', title: '编号', width: 50, sortable: true, rowspan: 2 },
+                            {
+                                field: 'Image', title: '产品图片', width: 60, rowspan: 2, align: 'center', formatter: function (value, row, index) {
+
+                                    return "<img src='" + row.Image + "' alt='" + row.ProductName + "' width='60px',higth='60px' />";
+                                }
+
+                            },
+                            { field: 'ProductTypeName', title: '所属类型', width: 100, sortable: true, rowspan: 2 },
+                            { field: 'ProductName', title: '产品名称', width: 150, sortable: true, rowspan: 2 },
+                            { title: '价格(单位：元)', colspan: 2 },
+                            { field: 'GetDate', title: '录入/修改时间', width: 120, sortable: true, align: 'center', rowspan: 2 },
+                            {
+                                field: 'Enable', title: '状态', width: 50, rowspan: 2, formatter: function (value, row, index) {
+                                    if (row.Enable) {
+
+                                        return "出售中";
+                                    } else {
+
+                                        return "已下架";
+                                    }
+                                }, styler: function (value, row, index) {
+                                    if (!row.Enabled) {
+                                        return 'background-color:#ffee00;color:red;';
+                                    }
+                                }
+
+                            }
+
+                ], [{ field: 'MarketPrice', title: '市场价', width: 80, sortable: true },
+                            { field: 'NewPrice', title: '真实价', width: 80, sortable: true }]
+                ],
+                fit: true,
+                pagination: true,
+                rownumbers: true,
+                fitColumns: true,
+                singleSelect: false,
+            });
+        })
+        $(function NewProduct() {
+            $('#dlg').dialog('open').dialog('setTitle', 'New User');
+            $('#fm').form('clear');
+        })
+    </script>
+    }
+
+@*<div id="grid">
+
+</div>*@
+
+<div>
+    <table class="easyui-datagrid"  
+        data-options="url: '/Home/LoadProductjson',fitColumns:true,
+        singleSelect:true,title:'产品清单',rownumbers:true,pagination:true,striped:true,idfield:'ID',sortName: 'ProductName',sortOrder: 'desc',
+        pagesize:10,loadMsg:'正在加载。。。。',ctrlSelect:true,singleSelect:false,toolbar:'#toolbar'"
+        >   
+        <thead>
+            <tr>
+                <th data-options="field:'ID',width:100,rowspan:2">产品ID</th>
+                <th data-options="field:'Image',width:100,rowspan:2">产品图片</th>
+                <th data-options="field:'ProductTypeName',width:100,rowspan:2">所属类型</th>
+                <th data-options="field:'ProductName',width:100,rowspan:2">产品名称</th>
+                <th data-options="colspan:2">产品价格</th>
+            </tr>
+            <tr>
+                <th data-options="field:'MarketPrice',width:100">市场价</th>
+                <th data-options="field:'NewPrice',width:100">真实价</th>
+            </tr>
+        </thead>
+    </table>
+    <div id="toolbar">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="NewProduct()">添加</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="EditProduct()">编辑</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="DelProduct()">删除</a>
+    </div>
+
+
+    <div id="dlg" class="easyui-dialog" title="My Dialog" style="width:400px;height:200px;"   
+        data-options="iconCls:'icon-save',resizable:true,modal:true" closed="true" buttons="#dlg-buttons">   
+        Dialog Content.    
+    </div> 
+
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
