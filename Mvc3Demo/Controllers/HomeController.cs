@@ -64,5 +64,39 @@ namespace Mvc3Demo.Controllers
             return View();
         }
 
+        public ActionResult CreateProductType(FormCollection collection)
+        {
+            //int ProductTypeId = Convert.ToInt32(collection.Get("Id"));
+            String ProductTypeName = collection.Get("Name");//是控件的Name属性而不是id属性
+            String Description = collection.Get("Description");
+            ProductType info = new ProductType();
+            info.Name = ProductTypeName;
+            info.Description = Description;
+
+            Message msg;
+            if (productTypeBLL.GreateProductType(info))
+            {
+                msg = new Message(true, "添加" + ProductTypeName + "信息成功！");
+            }
+            else
+            {
+                msg = new Message(false, "添加产品类型失败，操作有误");
+            }
+            string Str = json.Serialize(msg);//   
+            return Content(Str, "text/html;charset=UTF-8");
+        }
+
+        /// ProductType的commbox列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetTypesList()
+        {
+            IList<ProductTypeInfo> ProductTypes = productTypeBLL.GetProductTypesList();
+            //System.Web.Extentions的DLL中
+            JavaScriptSerializer json = new JavaScriptSerializer();
+            string Str = json.Serialize(ProductTypes);//   方法一
+            return Content(Str, "text/html;charset=UTF-8");
+        }
+
     }
 }

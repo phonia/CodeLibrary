@@ -3,29 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Infrastructure.Domain
+namespace CFInfrastructure.Domain
 {
     public abstract class EntityBase
     {
-        private List<BusinessRule> m_brokenRules = new List<BusinessRule>();
+        private List<BusinessRules> _brokenRules = new List<BusinessRules>();
 
         public abstract void Validate();
 
-        public IEnumerable<BusinessRule> GetBrokenRules()
+        public IEnumerable<BusinessRules> GetBrokenRules()
         {
-            m_brokenRules.Clear();
+            if (_brokenRules == null) _brokenRules = new List<BusinessRules>();
+            _brokenRules.Clear();
             Validate();
-            return m_brokenRules;
+            return _brokenRules;
         }
 
-        protected void AddBrokenRule(BusinessRule businessRule)
+        protected void AddBrokenRule(BusinessRules businessRule)
         {
-            m_brokenRules.Add(businessRule);
+            if (_brokenRules == null) _brokenRules = new List<BusinessRules>();
+            _brokenRules.Add(businessRule);
         }
 
         public abstract override int GetHashCode();
 
-        public abstract override bool Equals(object entity);
+        public abstract override bool Equals(object obj);
 
         public static bool operator ==(EntityBase entity1, EntityBase entity2)
         {
@@ -44,7 +46,12 @@ namespace Infrastructure.Domain
                 return false;
             }
 
-            return entity1.Equals(entity2);
+            if (entity1.Equals(entity2))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public static bool operator !=(EntityBase entity1, EntityBase entity2)
