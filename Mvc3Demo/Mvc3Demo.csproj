@@ -1142,6 +1142,7 @@
     <Content Include="Content\jquery-easyui-1.4.3\demo\tree\tree_data1.json" />
     <Content Include="Content\jquery-easyui-1.4.3\demo\tree\tree_data2.json" />
     <None Include="Scripts\jquery-1.11.3.intellisense.js" />
+    <Content Include="record.txt" />
     <Content Include="Scripts\easyloader.js" />
     <Content Include="Scripts\jquery-1.11.3.js" />
     <Content Include="Scripts\jquery-1.11.3.min.js" />

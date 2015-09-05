@@ -147,13 +147,19 @@
                 editurl = '/Home/UpdateProduct?id=' + rows[0].ID;
             }
         }
+
+        $(function () {
+            $('#dd1').draggable();
+        })
     </script>
     }
 
 @*<div id="grid">
 
 </div>*@
+<div id="dd1" class="dd-demo" style="width:110px;height:110px;background-color:gray">
 
+</div>
 <div>
     <table class="easyui-datagrid" id="grid"  
         data-options="url: '/Home/LoadProductjson',fitColumns:true,
