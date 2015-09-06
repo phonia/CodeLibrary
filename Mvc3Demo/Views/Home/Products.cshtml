@@ -59,8 +59,7 @@
             });
         })
         $(function NewProduct() {
-            $('#dlg').dialog('open').dialog('setTitle', 'New User');
-            $('#fm').form('clear');
+            $('#dlg').dialog('open').dialog('setTitle', 'NewProduct');
         })
     </script>
     }
@@ -90,7 +89,7 @@
         </thead>
     </table>
     <div id="toolbar">
-        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="NewProduct()">添加</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:$('#dlg').dialog('open')">添加</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="EditProduct()">编辑</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="DelProduct()">删除</a>
     </div>
