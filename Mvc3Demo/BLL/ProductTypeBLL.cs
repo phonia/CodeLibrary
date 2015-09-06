@@ -93,6 +93,7 @@ namespace Mvc3Demo.BLL
                 bool a = false;
                 try
                 {
+                    info.Id = Guid.NewGuid();
                     db.ProductType.Add(info);
                     int b = db.SaveChanges();
                     if (b == 1)

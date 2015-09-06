@@ -4,6 +4,21 @@
 }
 @section Head{
     <script type="text/javascript">
+
+        var editurl = '';
+
+        $(function () {
+
+            $("#TypeId,#TypeId2").combobox({
+                url: "/Home/GetTypesList",
+                editable: false,
+                valueField: "ID",
+                textField: "ProductTypeName",
+                panelHeight: "auto"
+            });
+
+        })
+
         $(function () {
             var grid = $('#grid').datagrid({
                 title: '产品管理',
@@ -58,8 +73,88 @@
                 singleSelect: false,
             });
         })
+
+
         $(function NewProduct() {
             $('#dlg').dialog('open').dialog('setTitle', 'NewProduct');
+        })
+
+        function NewProduct() {
+            $('#dlg').dialog('open');
+            $('#dlg').dialog('setTitle', '添加产品信息');
+            $('#fm').form('clear');
+        }
+
+        function SaveProduct() {
+            $('#fm').form('submit', {
+                url: '/Home/CreateProductType/',
+                onSubmit: function () {
+                    return $(this).form('validate');
+                },
+                success: function (result) {
+                    //result为请求处理后的返回值    
+                    var result = eval('(' + result + ')');
+                    if (result.success) {
+                        $.messager.show({
+                            title: '成功',
+                            msg: result.msg,
+                            timeout: 2000,
+                            showType: 'fade'
+                        });
+                        //grid.datagrid('reload'); //grid变量要与其他文件中的一致
+                        $('#grid').datagrid('reload');
+                        //dlg_Edit.dialog('close'); //dlg_Edit与其他文件中的一致  才能公共调用 
+                        $('#dlg').dialog('close');
+
+
+                    } else {
+                        $.messager.show({
+                            title: '错误提示',
+                            msg: result.msg
+                        });
+                    }
+                }
+            });
+        }
+
+        function EditProduct() {
+            var rows = $('#grid').datagrid('getSelections');
+            var num = rows.length;
+            if (num == 0) {
+                $.messager.show({
+                    title: '提示',
+                    msg: '请选中一行',
+                    showType: 'show'
+                });
+                return;
+            }
+            else if (num > 1) {
+                $.messager.show({
+                    title: '提示',
+                    msg: '只能选中一行',
+                    showType: 'show'
+                });
+                return;
+            }
+            else {
+                //alert(rows[0].ProductId);
+                //dlg_Edit_form.form('clear');
+                $('#fm').form('clear');
+                //dlg_Edit.dialog('open');
+                $('#dlg').dialog('open');
+                //dlg_Edit.dialog('setTitle', '您正在修改的是:' + rows[0].ProductTypeName + "->" + rows[0].ProductName);
+                $('#dlg').dialog('setTitle', '您正在修改的是：' + rows[0].ProductTypeName + "->" + rows[0].ProductName);
+                //dlg_Edit_form.form('load', rows[0]); //加载到表单的控件上 
+                $('#fm').form('load', rows[0]);
+                //  $("#tishi").html("禁止修改");
+                
+                //dlg_Edit_form.url = virpath + '/Admin/UpdateProduct?id=' + rows[0].ID;
+                editurl = '/Home/UpdateProduct?id=' + rows[0].ID;
+            }
+        }
+
+        $(function () {
+            $('#dd1').draggable();
         })
     </script>
     }
@@ -67,9 +162,11 @@
 @*<div id="grid">
 
 </div>*@
+<div id="dd1" class="dd-demo" style="width:110px;height:110px;background-color:gray">
 
+</div>
 <div>
-    <table class="easyui-datagrid"  
+    <table class="easyui-datagrid" id="grid"  
         data-options="url: '/Home/LoadProductjson',fitColumns:true,
         singleSelect:true,title:'产品清单',rownumbers:true,pagination:true,striped:true,idfield:'ID',sortName: 'ProductName',sortOrder: 'desc',
         pagesize:10,loadMsg:'正在加载。。。。',ctrlSelect:true,singleSelect:false,toolbar:'#toolbar'"
@@ -91,17 +188,78 @@
     <div id="toolbar">
         <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:$('#dlg').dialog('open')">添加</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="EditProduct()">编辑</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="DelProduct()">删除</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="NewProduct()">删除</a>
     </div>
 
 
-    <div id="dlg" class="easyui-dialog" title="My Dialog" style="width:400px;height:200px;"   
-        data-options="iconCls:'icon-save',resizable:true,modal:true" closed="true" buttons="#dlg-buttons">   
-        Dialog Content.    
-    </div> 
+<div id="dlg" title="窗口" style="width: 500px; height: 300px;" buttons="#buttons" closed="true" class="easyui-dialog" buttons="#buttons" >
+        <div style="padding: 20px 20px 40px 40px;">
+            <form method="post" id="fm">
+            <table>
+                <tr>
+                    <td style="text-align:right">
+                        产品类型：
+                    </td>
+                    <td>
+                        <select id="TypeId" class="easyui-combogrid" name="ProductTypeID" style="width:200px;"  class="easyui-validatebox" required="true">
+		
+	                    </select>
 
-    <div id="dlg-buttons">
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+                    </td>
+                </tr> 
+            
+                <tr>
+                    <td style="text-align:right">
+                        产品名称：
+                    </td>
+                    <td>
+                        <input type="text" name="ProductName" id="ProductName" class="easyui-validatebox" required="true" style="width: 200px;" maxlength=25 /> &nbsp;（限制：50个字节）
+                    </td>
+                </tr>
+                 <tr>
+                    <td style="text-align:right">
+                        产品图片：
+                    </td>
+                    <td>
+                        <input type="text" name="Image" id="Image" class="easyui-validatebox" required="true" style="width: 200px;" /> 
+                    </td>
+                </tr>
+                 <tr>
+                    <td style="text-align:right">
+                        市场价格：
+                    </td>
+                    <td>
+                        <input type="text" name="MarketPrice" id="MarketPrice" class="easyui-validatebox" required="true" onkeyup="value=value.replace(/[^\d]/g,'')" style="width: 200px;"  />
+                    &nbsp;（单位：元）</td>
+                </tr>
+                 <tr>
+                    <td style="text-align:right">
+                        本店价格：
+                    </td>
+                    <td>
+                        <input name="NewPrice" id="NewPrice" class="easyui-validatebox" required="true" style="width: 200px;" onkeyup="value=value.replace(/[^\d]/g,'')" />
+                    &nbsp;（单位：元）</td>
+                </tr>
+                
+                <tr>
+                    <td style="text-align:right">
+                        是否上架：
+                    </td>
+                    <td>
+                       
+                        <select id="Enable" class="easyui-combobox" name="Enable" style="width:200px;" class="easyui-validatebox" required="true" editable="false" panelHeight= "auto">
+		                     <option value="1">上架</option> @*true在网页中格式化了1*@
+		                     <option value="0">下架</option>
+                        </select> &nbsp;（默认：上架）
+                    </td>
+                </tr>
+
+            </table>
+            </form>
+        </div>
+    </div>
+    <div id="buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="SaveProduct()" style="width:90px">Save</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
     </div>
 </div>

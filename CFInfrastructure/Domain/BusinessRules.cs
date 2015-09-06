@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Infrastructure.Domain
+namespace CFInfrastructure.Domain
 {
-    public class BusinessRule
+    public class BusinessRules
     {
         public string Property { get; set; }
         public string Rule { get; set; }
