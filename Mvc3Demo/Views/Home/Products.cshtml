@@ -19,60 +19,60 @@
 
         })
 
-        $(function () {
-            var grid = $('#grid').datagrid({
-                title: '产品管理',
-                iconCls: 'icon-save',
-                //method: 'post',
-                url: '/Home/LoadProductjson',
-                sortName: 'ID',
-                sortOrder: 'desc',
-                idField: 'ID',
-                pageSize: 10,
-                striped: true,
-                frozenColumns: [[
-                    { field: 'ck', checkbox: true }
-                ]],
-                columns: [[
-                            //{ field: 'ID', title: '编号', width: 50, sortable: true, rowspan: 2 },
-                            {
-                                field: 'Image', title: '产品图片', width: 60, rowspan: 2, align: 'center', formatter: function (value, row, index) {
+        //$(function () {
+        //    var grid = $('#grid').datagrid({
+        //        title: '产品管理',
+        //        iconCls: 'icon-save',
+        //        //method: 'post',
+        //        url: '/Home/LoadProductjson',
+        //        sortName: 'ID',
+        //        sortOrder: 'desc',
+        //        idField: 'ID',
+        //        pageSize: 10,
+        //        striped: true,
+        //        frozenColumns: [[
+        //            { field: 'ck', checkbox: true }
+        //        ]],
+        //        columns: [[
+        //                    //{ field: 'ID', title: '编号', width: 50, sortable: true, rowspan: 2 },
+        //                    {
+        //                        field: 'Image', title: '产品图片', width: 60, rowspan: 2, align: 'center', formatter: function (value, row, index) {
 
-                                    return "<img src='" + row.Image + "' alt='" + row.ProductName + "' width='60px',higth='60px' />";
-                                }
+        //                            return "<img src='" + row.Image + "' alt='" + row.ProductName + "' width='60px',higth='60px' />";
+        //                        }
 
-                            },
-                            { field: 'ProductTypeName', title: '所属类型', width: 100, sortable: true, rowspan: 2 },
-                            { field: 'ProductName', title: '产品名称', width: 150, sortable: true, rowspan: 2 },
-                            { title: '价格(单位：元)', colspan: 2 },
-                            { field: 'GetDate', title: '录入/修改时间', width: 120, sortable: true, align: 'center', rowspan: 2 },
-                            {
-                                field: 'Enable', title: '状态', width: 50, rowspan: 2, formatter: function (value, row, index) {
-                                    if (row.Enable) {
+        //                    },
+        //                    { field: 'ProductTypeName', title: '所属类型', width: 100, sortable: true, rowspan: 2 },
+        //                    { field: 'ProductName', title: '产品名称', width: 150, sortable: true, rowspan: 2 },
+        //                    { title: '价格(单位：元)', colspan: 2 },
+        //                    { field: 'GetDate', title: '录入/修改时间', width: 120, sortable: true, align: 'center', rowspan: 2 },
+        //                    {
+        //                        field: 'Enable', title: '状态', width: 50, rowspan: 2, formatter: function (value, row, index) {
+        //                            if (row.Enable) {
 
-                                        return "出售中";
-                                    } else {
+        //                                return "出售中";
+        //                            } else {
 
-                                        return "已下架";
-                                    }
-                                }, styler: function (value, row, index) {
-                                    if (!row.Enabled) {
-                                        return 'background-color:#ffee00;color:red;';
-                                    }
-                                }
+        //                                return "已下架";
+        //                            }
+        //                        }, styler: function (value, row, index) {
+        //                            if (!row.Enabled) {
+        //                                return 'background-color:#ffee00;color:red;';
+        //                            }
+        //                        }
 
-                            }
+        //                    }
 
-                ], [{ field: 'MarketPrice', title: '市场价', width: 80, sortable: true },
-                            { field: 'NewPrice', title: '真实价', width: 80, sortable: true }]
-                ],
-                fit: true,
-                pagination: true,
-                rownumbers: true,
-                fitColumns: true,
-                singleSelect: false,
-            });
-        })
+        //        ], [{ field: 'MarketPrice', title: '市场价', width: 80, sortable: true },
+        //                    { field: 'NewPrice', title: '真实价', width: 80, sortable: true }]
+        //        ],
+        //        fit: true,
+        //        pagination: true,
+        //        rownumbers: true,
+        //        fitColumns: true,
+        //        singleSelect: false,
+        //    });
+        //})
 
 
         $(function NewProduct() {
@@ -154,7 +154,9 @@
         }
 
         $(function () {
-            $('#dd1').draggable();
+            $('#dd1').draggable({
+                proxy:'clone'
+            });
         })
     </script>
     }

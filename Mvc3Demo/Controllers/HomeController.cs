@@ -98,5 +98,40 @@ namespace Mvc3Demo.Controllers
             return Content(Str, "text/html;charset=UTF-8");
         }
 
+        public ActionResult GetTestTree()
+        {
+            string rel = "";
+            //using (MyDbContext context = new MyDbContext())
+            //{
+            //    var cd = (from b in context.TestTree.Where(it => true) select b).FirstOrDefault();
+            //    rel = json.Serialize(cd);
+            //}
+
+
+            node n1 = new node() { id = 0, text = "0" };
+            node n2 = new node() { id = 1, text = "1" };
+            node n3 = new node() { id = 2, text = "2" };
+            n3.children = new List<node>();
+            n3.children.Add(n1);
+            n3.children.Add(n2);
+            List<node> list = new List<node>();
+            list.Add(n3);
+
+            return Content(json.Serialize(list), "text/html:charset=utf-8");
+        }
+
+        public ActionResult TestTree()
+        {
+            return View();
+        }
+
+    }
+
+    [Serializable]
+    public class node
+    {
+        public int id { get; set; }
+        public string text { get; set; }
+        public IList<node> children { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace Mvc3Demo.Models
 
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductType> ProductType { get; set; }
+        public virtual DbSet<TestTree> TestTree { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -42,9 +43,18 @@ namespace Mvc3Demo.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<ProductType>()
-                .HasMany(e => e.Products)
+                .HasMany(e => e.Product)
                 .WithRequired(e => e.ProductType)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<TestTree>()
+                .Property(e => e.name)
+                .IsFixedLength();
+
+            modelBuilder.Entity<TestTree>()
+                .HasMany(e => e.TestTree1)
+                .WithOptional(e => e.TestTree2)
+                .HasForeignKey(e => e.Parent);
         }
     }
 }

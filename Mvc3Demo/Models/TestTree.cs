@@ -6,26 +6,25 @@ namespace Mvc3Demo.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("ProductType")]
-    public partial class ProductType
+    [Table("TestTree")]
+    public partial class TestTree
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ProductType()
+        public TestTree()
         {
-            Product = new HashSet<Product>();
+            TestTree1 = new HashSet<TestTree>();
         }
 
         public Guid Id { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string Name { get; set; }
+        [StringLength(10)]
+        public string name { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string Description { get; set; }
+        public Guid? Parent { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Product> Product { get; set; }
+        public virtual ICollection<TestTree> TestTree1 { get; set; }
+
+        public virtual TestTree TestTree2 { get; set; }
     }
 }
