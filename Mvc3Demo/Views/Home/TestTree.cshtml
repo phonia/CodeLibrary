@@ -7,19 +7,10 @@
         <script type="text/javascript">
             $(function () {
                 $('#tt').tree({
-                    url: '/Home/GetTestTree'
-                    //,
-                    //success: function (result) {
-                    //    var myJson = eval('(' + result + ')');
-                    //    $('#tt').tree({ data: myJson })
-                    //},
-                    //loadFilter: function (data) {
-                    //    if (data.d) {
-                    //        return data.d;
-                    //    } else {
-                    //        return data;
-                    //    }
-                    //}
+                    url: '/Home/GetTestTree',
+                    onBeforeExpand: function (node, param) {
+                        $('#tt').tree('options').url = '/Home/GetTestTreet?i=' + node.id;
+                    }
                 });
                 $('#tt').show();
             });

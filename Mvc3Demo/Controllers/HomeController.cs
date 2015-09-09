@@ -100,21 +100,29 @@ namespace Mvc3Demo.Controllers
 
         public ActionResult GetTestTree()
         {
-            string rel = "";
-            //using (MyDbContext context = new MyDbContext())
-            //{
-            //    var cd = (from b in context.TestTree.Where(it => true) select b).FirstOrDefault();
-            //    rel = json.Serialize(cd);
-            //}
-
-
-            node n1 = new node() { id = 0, text = "0" };
-            node n2 = new node() { id = 1, text = "1" };
-            node n3 = new node() { id = 2, text = "2" };
-            n3.children = new List<node>();
-            n3.children.Add(n1);
-            n3.children.Add(n2);
+            //node n1 = new node() { id = 0, text = "0", state = "colsed" };
+            //node n2 = new node() { id = 1, text = "1", state = "closed" };
+            node n3 = new node() { id = 2, text = "2", state = "closed" };
+            //n3.children = new List<node>();
+            //n3.children.Add(n1);
+            //n3.children.Add(n2);
             List<node> list = new List<node>();
+            list.Add(n3);
+
+            return Content(json.Serialize(list), "text/html:charset=utf-8");
+        }
+
+        public ActionResult GetTestTreet(int i)
+        {
+            node n1 = new node() { id = 3 * i, text = (3 * i).ToString(),state="closed" };
+            node n2 = new node() { id = 3 * i + 1, text = (3 * i + 1).ToString(), state = "closed" };
+            node n3 = new node() { id = 3 * i + 2, text = (3 * i + 2).ToString(), state = "closed" };
+            //n3.children = new List<node>();
+            //n3.children.Add(n1);
+            //n3.children.Add(n2);
+            List<node> list = new List<node>();
+            list.Add(n1);
+            list.Add(n2);
             list.Add(n3);
 
             return Content(json.Serialize(list), "text/html:charset=utf-8");
@@ -125,6 +133,44 @@ namespace Mvc3Demo.Controllers
             return View();
         }
 
+        public ActionResult GridTree()
+        {
+            return View();
+        }
+
+        public ActionResult GetGridTree()
+        {
+            Models.TestTree tt = null;
+            using (MyDbContext context = new MyDbContext())
+            {
+                var cd = (from b in context.TestTree.Where(it => it.Parent == null) select b).FirstOrDefault();
+                tt = new TestTree();
+                tt.Id = cd.Id;
+                tt.name = cd.name;
+                tt.Parent = cd.Parent;
+            }
+            return Content(json.Serialize(tt), "text/html:charset=utf-8");
+        }
+
+        public ActionResult GetGridTreet(Guid id)
+        {
+            List<Models.TestTree> list = new List<Models.TestTree>();
+            Models.TestTree tt = null;
+            using (MyDbContext context = new MyDbContext())
+            {
+                var cd = from b in context.TestTree.Where(it => it.Parent == id) select b;
+                foreach (var item in cd)
+                {
+                    tt = new TestTree();
+                    tt.Id = item.Id;
+                    tt.name = item.name;
+                    tt.Parent = item.Parent;
+                    list.Add(tt);
+                }
+            }
+            return Content(json.Serialize(list), "text/html:charset=utf-8");
+        }
+
     }
 
     [Serializable]
@@ -132,6 +178,7 @@ namespace Mvc3Demo.Controllers
     {
         public int id { get; set; }
         public string text { get; set; }
+        public string state { get; set; }
         public IList<node> children { get; set; }
     }
 }

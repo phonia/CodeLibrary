@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "GridTree";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>GridTree</h2>
+<div>
+        	<table title="gridtree" class="easyui-treegrid" style="width:700px;height:300px"
+    			data-options="
+    				url: '/Home/GetGridTree',
+    				rownumbers: true,
+    				pagination: true,
+    				pageSize: 2,
+    				pageList: [2,10,20],
+    				idField: 'Id',
+    				treeField: 'name'
+    			">
+    		<thead>
+    			<tr>
+    				<th field="name" width="250">Name</th>
+@*    				<th field="quantity" width="100" align="right">Quantity</th>
+    				<th field="price" width="150" align="right" formatter="formatDollar">Price</th>
+    				<th field="total" width="150" align="right" formatter="formatDollar">Total</th>*@
+    			</tr>
+    		</thead>
+    	</table>
+</div>

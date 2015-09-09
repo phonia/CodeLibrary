@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFInfrastructure", "CFInfra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfInfrastructure", "SelfInfrastructure\SelfInfrastructure.csproj", "{A8F08519-6B6D-46CC-A83A-891DEA942ABA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhileLoop", "WhileLoop\WhileLoop.csproj", "{C683EDD6-CB7D-4438-87D1-812F24A60490}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{A8F08519-6B6D-46CC-A83A-891DEA942ABA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8F08519-6B6D-46CC-A83A-891DEA942ABA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8F08519-6B6D-46CC-A83A-891DEA942ABA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C683EDD6-CB7D-4438-87D1-812F24A60490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C683EDD6-CB7D-4438-87D1-812F24A60490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C683EDD6-CB7D-4438-87D1-812F24A60490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C683EDD6-CB7D-4438-87D1-812F24A60490}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +72,6 @@ Global
 		{718DD623-BCB1-418B-81C0-49B93C334CEB} = {ECD1879E-53BF-477B-A50A-19799BC7B283}
 		{E4087736-A1C4-48BD-AEED-62D88103BCBA} = {ECD1879E-53BF-477B-A50A-19799BC7B283}
 		{79B5E61C-BD73-41C5-8070-8CC9B9577DEE} = {ECD1879E-53BF-477B-A50A-19799BC7B283}
+		{C683EDD6-CB7D-4438-87D1-812F24A60490} = {ECD1879E-53BF-477B-A50A-19799BC7B283}
 	EndGlobalSection
 EndGlobal
