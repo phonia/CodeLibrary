@@ -140,36 +140,49 @@ namespace Mvc3Demo.Controllers
 
         public ActionResult GetGridTree()
         {
-            Models.TestTree tt = null;
+            List<GridTree> list = new List<GridTree>();
+            GridTree tt = null;
             using (MyDbContext context = new MyDbContext())
             {
                 var cd = (from b in context.TestTree.Where(it => it.Parent == null) select b).FirstOrDefault();
-                tt = new TestTree();
+                tt = new Controllers.GridTree();
                 tt.Id = cd.Id;
                 tt.name = cd.name;
-                tt.Parent = cd.Parent;
+                tt.parentId = cd.Parent;
+                tt.state = "closed";
+                list.Add(tt);
             }
-            return Content(json.Serialize(tt), "text/html:charset=utf-8");
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            dict.Add("total", list.Count);
+            dict.Add("rows", list);
+            return Content(json.Serialize(dict), "text/html:charset=utf-8");
         }
 
-        public ActionResult GetGridTreet(Guid id)
+        public ActionResult GetGridTreet(string i)
         {
-            List<Models.TestTree> list = new List<Models.TestTree>();
-            Models.TestTree tt = null;
+            System.Guid id = System.Guid.Parse(i);
+            List<GridTree> list = new List<GridTree>();
+            GridTree tt = null;
             using (MyDbContext context = new MyDbContext())
             {
                 var cd = from b in context.TestTree.Where(it => it.Parent == id) select b;
                 foreach (var item in cd)
                 {
-                    tt = new TestTree();
+                    tt = new Controllers.GridTree();
                     tt.Id = item.Id;
                     tt.name = item.name;
-                    tt.Parent = item.Parent;
+                    tt.parentId = item.Parent;
+                    tt.state = "closed";
                     list.Add(tt);
                 }
             }
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            dict.Add("total", list.Count);
+            dict.Add("rows", list);
             return Content(json.Serialize(list), "text/html:charset=utf-8");
         }
+
+        static int count = 0;
 
     }
 
@@ -180,5 +193,14 @@ namespace Mvc3Demo.Controllers
         public string text { get; set; }
         public string state { get; set; }
         public IList<node> children { get; set; }
+    }
+
+    [Serializable]
+    public class GridTree
+    {
+        public System.Guid Id { get; set; }
+        public string name { get; set; }
+        public System.Guid? parentId { get; set; }
+        public string state { get; set; }
     }
 }
