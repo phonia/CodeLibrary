@@ -27,4 +27,15 @@ namespace Mvc3Demo.Models
 
         public virtual TestTree TestTree2 { get; set; }
     }
+
+    public partial class TestTree
+    {
+        [NotMapped]
+        public string state { get; set; }
+
+        public void Init()
+        {
+            state = "closed";
+        }
+    }
 }

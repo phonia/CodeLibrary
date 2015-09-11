@@ -149,7 +149,8 @@ namespace Mvc3Demo.Controllers
                 tt.Id = cd.Id;
                 tt.name = cd.name;
                 tt.parentId = cd.Parent;
-                tt.state = "closed";
+                cd.Init();
+                tt.state = cd.state;
                 list.Add(tt);
             }
             Dictionary<string, object> dict = new Dictionary<string, object>();
@@ -172,7 +173,8 @@ namespace Mvc3Demo.Controllers
                     tt.Id = item.Id;
                     tt.name = item.name;
                     tt.parentId = item.Parent;
-                    tt.state = "closed";
+                    item.Init();
+                    tt.state = item.state;
                     list.Add(tt);
                 }
             }
