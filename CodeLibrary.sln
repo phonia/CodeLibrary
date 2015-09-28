@@ -14,6 +14,9 @@ EndProject
 Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "UnitOfWork", "UnitOfWork\UnitOfWork.modelproj", "{0D837E32-0495-4E17-8173-0F3FF65B9C12}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Study", "Study", "{ECD1879E-53BF-477B-A50A-19799BC7B283}"
+	ProjectSection(SolutionItems) = preProject
+		Note.doc = Note.doc
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiThreadAndLock", "MultiThreadAndLock\MultiThreadAndLock.csproj", "{718DD623-BCB1-418B-81C0-49B93C334CEB}"
 EndProject
@@ -46,6 +49,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsServiceWcfServiceLib
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfServiceLibrayWindowsFormsApplicationClient", "WcfServiceLibrayWindowsFormsApplicationClient\WcfServiceLibrayWindowsFormsApplicationClient.csproj", "{B918EF9C-7790-4B2D-AF7A-009265A535DC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{15B3E0D2-6217-493A-A690-158C497F5318} = {15B3E0D2-6217-493A-A690-158C497F5318}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
