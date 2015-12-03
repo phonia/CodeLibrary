@@ -35,7 +35,7 @@ namespace EntityFrameworkCodefirst
             }
             catch (Exception ex)
             {
-                Console.Write("sdfsdfsdfsd");
+                Console.Write("sdfsdfsdfsds");
             }
         }
 
