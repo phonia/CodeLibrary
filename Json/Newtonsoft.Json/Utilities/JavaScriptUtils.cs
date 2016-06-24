@@ -33,7 +33,7 @@ using System.Collections.Generic;
 
 namespace Newtonsoft.Json.Utilities
 {
-  internal static class JavaScriptUtils
+  public static class JavaScriptUtils
   {
     public static void WriteEscapedJavaScriptString(TextWriter writer, string s, char delimiter, bool appendDelimiters)
     {

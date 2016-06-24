@@ -67,11 +67,7 @@ namespace Newtonsoft.Json.Tests.Serialization
       Assert.AreEqual(person.Name, deserializedPerson.Name);
 
       json = JsonConvert.SerializeObject(person, Formatting.Indented);
-      Assert.AreEqual(@"{
-  ""Name"": ""Name!"",
-  ""BirthDate"": ""\/Date(974764544000)\/"",
-  ""LastModified"": ""\/Date(974764544000)\/""
-}", json);
+      Assert.AreEqual(@"{""Name"": ""Name!"",""BirthDate"": ""\/Date(974764544000)\/"",""LastModified"": ""\/Date(974764544000)\/""}", json);
 
     }
 
