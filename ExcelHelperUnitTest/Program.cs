@@ -60,10 +60,16 @@ namespace ExcelHelperUnitTest
                     record.RefrencePropertyName = table.Rows[i]["参考字段"] is DBNull ? String.Empty : table.Rows[i]["参考字段"].ToString();
                     list.Add(record);
                 }
-            }
-            foreach (var item in list.Select(it => it.ClassName).Distinct())
-            {
-                Console.WriteLine(item.ToString());
+
+                foreach (var node in list.Select(it => it.ClassName).Distinct())
+                {
+                    if (String.IsNullOrWhiteSpace(node)) continue;
+                    //code
+                    foreach (var record in list.Where(it => it.ClassName.Equals(node)))
+                    {
+                        
+                    }
+                }
             }
         }
     }
