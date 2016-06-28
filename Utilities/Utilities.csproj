@@ -39,11 +39,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Json\ArrayJsonConverter.cs" />
+    <Compile Include="Json\GenericJsonConverter.cs" />
     <Compile Include="Json\JavaScriptUtils.cs" />
     <Compile Include="Json\JsonConverterWrapper.cs" />
     <Compile Include="Json\JsonConverter.cs" />
     <Compile Include="Json\JsonConverterSetting.cs" />
     <Compile Include="Json\MathiUtils.cs" />
+    <Compile Include="Json\StringJsonConverter.cs" />
     <Compile Include="Json\StringUtils.cs" />
     <Compile Include="Json\ValidationUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

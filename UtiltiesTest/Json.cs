@@ -63,8 +63,11 @@ namespace UtiltiesTest
         [TestMethod]
         public void ToJson()
         {
+            String result = "How now brown cow?";
+            Assert.AreEqual(@"""How now brown cow?""", result.ToJson());
+
             Person person = new Person() { Name = "hy", Tel = "15975455335" };
-            person.ToJson();
+            Console.WriteLine(person.ToJson());
         }
 
         [TestMethod]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -12,8 +13,28 @@ namespace Utilities.Json
 
         public String ToJson(object value)
         {
-            if (value is System.String) return StringFormat((String)value);
-            return String.Empty;
+            return Serialize(value);
         }
+
+        String Serialize(object value)
+        {
+            IJsonConverter jsonConverter = GetJsonConverter(value);
+            return jsonConverter.Serialize(value);
+        }
+
+        IJsonConverter GetJsonConverter(object value)
+        {
+            if (value is System.String) return new StringJsonConverter();
+            if (value.GetType().IsGenericType) return new GenericJsonConverter();
+            if (value.GetType().IsArray) return new ArrayJsonConverter();
+            throw new Exception("Unkown Type!");
+        }
+
+
+    }
+
+    public interface IJsonConverter
+    {
+        String Serialize(object value);
     }
 }
