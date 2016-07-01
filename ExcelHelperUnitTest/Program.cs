@@ -68,6 +68,7 @@ namespace ExcelHelperUnitTest
                 {
                     if (String.IsNullOrWhiteSpace(node.EntityClass)) continue;
                     //code
+
                     foreach (var record in list)
                     {
                         if (record.ClassName.Equals(node.ClassName) 
