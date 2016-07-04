@@ -43,14 +43,14 @@ namespace ExcelHelperUnitTest
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
                     EntityExcelRecord record = new EntityExcelRecord();
-                    record.ClassName = table.Rows[i]["类型名"] is DBNull ? String.Empty : table.Rows[i]["所属模型"].ToString();
-                    record.EntityClass = table.Rows[i]["基类"] is DBNull ? String.Empty : table.Rows[i]["基类"].ToString();
+                    record.ClassName = table.Rows[i]["类型名"] is DBNull ? String.Empty : table.Rows[i]["类型名"].ToString();
+                    record.BaseClass = table.Rows[i]["基类"] is DBNull ? String.Empty : table.Rows[i]["基类"].ToString();
+                    record.MappingClass = table.Rows[i]["映射类型"] is DBNull ? String.Empty : table.Rows[i]["映射类型"].ToString();
                     record.TableName = table.Rows[i]["所属表"] is DBNull ? String.Empty : table.Rows[i]["所属表"].ToString();
                     record.PropertyName = table.Rows[i]["字段名称"] is DBNull ? String.Empty : table.Rows[i]["字段名称"].ToString();
                     record.PropertyType = table.Rows[i]["属性类型"] is DBNull ? String.Empty : table.Rows[i]["属性类型"].ToString();
                     record.FieldType = table.Rows[i]["字段类型"] is DBNull ? String.Empty : table.Rows[i]["字段类型"].ToString();
                     record.MaxLength = table.Rows[i]["最大长度"] is DBNull ? null : (int?)Convert.ToInt16(table.Rows[i]["最大长度"]);
-                    record.ValueRegion = table.Rows[i]["取值范围"] is DBNull ? String.Empty : table.Rows[i]["取值范围"].ToString();
                     record.Decimal = table.Rows[i]["小数位数"] is DBNull ? null : (int?)Convert.ToInt16(table.Rows[i]["小数位数"]);
                     record.IsKey = table.Rows[i]["主键"] is DBNull ? false : true;
                     record.IsMultiPK=table.Rows[i]["复合主键"] is DBNull?false:true;
@@ -58,30 +58,65 @@ namespace ExcelHelperUnitTest
                     record.IsIdentity=table.Rows[i]["自增长"] is DBNull?false:true;
                     record.DefaultValue = table.Rows[i]["默认值"] is DBNull ? String.Empty : table.Rows[i]["默认值"].ToString();
                     record.Description = table.Rows[i]["字段说明"] is DBNull ? String.Empty : table.Rows[i]["字段说明"].ToString();
-                    record.RefrenceClassName = table.Rows[i]["参考表"] is DBNull ? String.Empty : table.Rows[i]["参考表"].ToString();
-                    record.RefrencePropertyName = table.Rows[i]["参考字段"] is DBNull ? String.Empty : table.Rows[i]["参考字段"].ToString();
+                    record.RefrenceClassName = table.Rows[i]["参考类型"] is DBNull ? String.Empty : table.Rows[i]["参考类型"].ToString();
+                    record.RefrencePropertyName = table.Rows[i]["参考属性"] is DBNull ? String.Empty : table.Rows[i]["参考属性"].ToString();
+                    record.RefrenceRelation = table.Rows[i]["类型关系"] is DBNull ? String.Empty : table.Rows[i]["类型关系"].ToString();
                     list.Add(record);
                 }
 
                 //Entity.tt
                 foreach (var node in list)
                 {
-                    if (String.IsNullOrWhiteSpace(node.EntityClass)) continue;
+                    if (String.IsNullOrWhiteSpace(node.MappingClass)) continue;
                     //code
+
+                    if (String.IsNullOrWhiteSpace(node.BaseClass))
+                    {
+                        //code inherit from object
+                    }
+                    else
+                    {
+                        //code inherit from node.BaseClass
+                    }
 
                     foreach (var record in list)
                     {
-                        if (record.ClassName.Equals(node.ClassName) 
-                            &&String.IsNullOrWhiteSpace(node.EntityClass)
-                            && String.IsNullOrWhiteSpace(record.RefrenceClassName))
+
+                        if (record.ClassName.Equals(node.ClassName)
+                            && String.IsNullOrWhiteSpace(record.MappingClass)
+                            &&String.IsNullOrWhiteSpace(record.RefrenceClassName))
                         {
-                            //code primitive property and complex propery
+                            //code primitive property
+
                         }
-                        if (record.ClassName.Equals(node.ClassName) 
-                            &&String.IsNullOrWhiteSpace(node.EntityClass)
+                        if (record.ClassName.Equals(node.ClassName)
+                            && String.IsNullOrWhiteSpace(record.MappingClass)
                             && !String.IsNullOrWhiteSpace(record.RefrenceClassName))
                         {
+                            //code self-navigation property
+                            if (String.IsNullOrWhiteSpace(record.RefrencePropertyName))
+                            { }
+                            else
+                            { }
+                        }
+                    }
+
+                    foreach (var record in list)
+                    {
+                        if (!String.IsNullOrWhiteSpace(record.RefrenceClassName)
+                            &&!String.IsNullOrWhiteSpace(record.RefrencePropertyName)
+                            && record.RefrenceClassName.Equals(node.ClassName)
+                            && String.IsNullOrWhiteSpace(record.MappingClass))
+                        {
                             //code navigation property
+                            if (record.RefrenceRelation.Equals("*"))
+                            { }
+                            if (record.RefrenceRelation.Equals("N"))
+                            { }
+                            if (record.RefrenceRelation.Equals("1"))
+                            { }
+                            if (record.RefrenceRelation.Equals("0..1"))
+                            { }
                         }
                     }
                 }
@@ -89,12 +124,95 @@ namespace ExcelHelperUnitTest
                 //EntityConfiguration.tt
                 foreach (var node in list)
                 {
-                    if (String.IsNullOrWhiteSpace(node.EntityClass)) continue;
-                    //code
-                    if (node.EntityClass.Equals("EntityType"))
+                    if (String.IsNullOrWhiteSpace(node.MappingClass)) continue;
+                    //Table and Key
+                    int count = 0;
+                    foreach (var record in list)
+                    {
+                        if (String.IsNullOrWhiteSpace(record.MappingClass)
+                            && record.ClassName.Equals(node.ClassName)
+                            && String.IsNullOrWhiteSpace(record.BaseClass)
+						    &&!String.IsNullOrWhiteSpace(record.TableName)
+						    &&!record.IsMultiPK
+						    &&record.IsKey)
+                        {
+
+                        }
+                    }
+                    if (count > 0)
                     { }
-                    if (node.EntityClass.Equals("ComplexType"))
-                    { }
+
+                    //primitive field
+                    foreach (var record in list)
+                    {
+                        if (String.IsNullOrWhiteSpace(record.MappingClass)
+                            && record.ClassName.Equals(node.ClassName)
+                            && String.IsNullOrWhiteSpace(record.BaseClass)
+                            && !String.IsNullOrWhiteSpace(record.TableName)
+                            &&String.IsNullOrWhiteSpace(record.RefrencePropertyName)
+                            &&String.IsNullOrWhiteSpace(record.RefrenceClassName))
+                        {
+                            //code
+                            Console.WriteLine(record.PropertyName);
+                            if (record.IsIdentity)
+                            { }
+                            if (record.Decimal > 0)
+                            { }
+                            if (!String.IsNullOrWhiteSpace(record.DefaultValue))
+                            { }
+                            if (!String.IsNullOrWhiteSpace(record.Description))
+                            { }
+                            if (!String.IsNullOrWhiteSpace(record.FieldType))
+                            { }
+                            if (record.MaxLength > 0)
+                            { }
+                            if (record.IsNull)
+                            { }
+                            else
+                            { }
+                            if (record.PropertyName.Equals(""))
+                            { }
+                        }
+                    }
+
+                    foreach (var record in list)
+                    {
+                        if (String.IsNullOrWhiteSpace(record.BaseClass)
+                            && record.ClassName.Equals(node.ClassName)
+                            && String.IsNullOrWhiteSpace(record.MappingClass)
+                            && !String.IsNullOrWhiteSpace(record.RefrenceClassName))
+                        {
+                            //自连接
+                            if (record.ClassName.Equals(record.RefrenceClassName))
+                            {
+                                continue;
+                            }
+                            if (String.IsNullOrWhiteSpace(record.RefrencePropertyName))
+                            {
+                                //code N-N
+                            }
+                            else
+                            {
+                                //code self 0/0...1
+                                if (record.IsNull)
+                                { }
+                                else
+                                { }
+
+                                //code FK 
+                                if (record.RefrenceRelation.Equals("*"))
+                                { }
+                                if (record.RefrenceRelation.Equals("N"))
+                                { }
+                                if (record.RefrenceRelation.Equals("1"))
+                                { }
+                                if (record.RefrenceRelation.Equals("0..1"))
+                                { }
+
+                            }
+                        }
+                    }
+                    //自连接
                 }
 
                 //DataContext.tt
@@ -107,13 +225,13 @@ namespace ExcelHelperUnitTest
     public class EntityExcelRecord
     {
         public String ClassName { get; set; }
-        public String EntityClass { get; set; }
+        public String BaseClass { get; set; }
+        public String MappingClass { get; set; }
         public String TableName { get; set; }
         public String PropertyName { get; set; }
         public String PropertyType { get; set; }
         public String FieldType { get; set; }
         public int? MaxLength { get; set; }
-        public String ValueRegion { get; set; }
         public int? Decimal { get; set; }
         public bool IsKey { get; set; }
         public bool IsMultiPK { get; set; }
@@ -123,5 +241,6 @@ namespace ExcelHelperUnitTest
         public String Description { get; set; }
         public String RefrenceClassName { get; set; }
         public String RefrencePropertyName { get; set; }
+        public String RefrenceRelation { get; set; }
     }
 }
