@@ -148,10 +148,16 @@ namespace ExcelHelperUnitTest
                         if (String.IsNullOrWhiteSpace(record.MappingClass)
                             && record.ClassName.Equals(node.ClassName)
                             && String.IsNullOrWhiteSpace(record.BaseClass)
-                            && !String.IsNullOrWhiteSpace(record.TableName)
+                            && !String.IsNullOrWhiteSpace(record.FieldType)
                             &&String.IsNullOrWhiteSpace(record.RefrencePropertyName)
                             &&String.IsNullOrWhiteSpace(record.RefrenceClassName))
                         {
+                            if (!String.IsNullOrWhiteSpace(record.TableName))
+                            { }
+                            else if (!String.IsNullOrWhiteSpace(node.MappingClass) && node.MappingClass.Equals("ComplexType"))
+                            { }
+                            else
+                                continue;
                             //code
                             Console.WriteLine(record.PropertyName);
                             if (record.IsIdentity)
@@ -216,6 +222,7 @@ namespace ExcelHelperUnitTest
                 }
 
                 //DataContext.tt
+
 
                 //DTO.tt
             }
