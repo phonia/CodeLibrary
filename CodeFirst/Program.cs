@@ -15,9 +15,6 @@ namespace CodeFirst
         static void Main(string[] args)
         {
             //List<EntityExcelRecord> list= EntityExcelRecord.GetAllRecordFromExcel(@"E:\Code\模型设计.xls");
-            BBX bbx = new BBX();
-            bbx.Print1();
-            bbx.print2();
         }
     }
 
@@ -790,26 +787,5 @@ namespace ERPS.Models
 
         public void GenerateModelMapDTO(List<EntityExcelRecord> list)
         { }
-    }
-
-    public class BBX
-    {
-        public String Name { get; set; }
-    }
-
-    public static partial class BBXX
-    {
-        public static void Print1(this BBX bbx)
-        {
-            Console.WriteLine(bbx.Name+"1");
-        }
-    }
-
-    public static partial class BBXX
-    {
-        public static void print2(this BBX bbx)
-        {
-            Console.WriteLine(bbx.Name + "2");
-        }
     }
 }
