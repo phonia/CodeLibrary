@@ -140,7 +140,7 @@ namespace CodeFirst
                 record.ClassMapping = dt.Rows[i]["数据模型"] is DBNull ? String.Empty : dt.Rows[i]["数据模型"].ToString();
                 record.ClassName = dt.Rows[i]["类型名称"] is DBNull ? String.Empty : dt.Rows[i]["类型名称"].ToString();
                 record.Description = dt.Rows[i]["字段说明"] is DBNull ? String.Empty : dt.Rows[i]["字段说明"].ToString();
-                record.FiledType = dt.Rows[i]["字段类型"] is DBNull ? String.Empty : dt.Rows[i]["字段类型"].ToString();
+                record.FieldType = dt.Rows[i]["字段类型"] is DBNull ? String.Empty : dt.Rows[i]["字段类型"].ToString();
                 record.IsIdentity = dt.Rows[i]["是否自增"] is DBNull ? false : true;
                 record.IsKey = dt.Rows[i]["主键"] is DBNull ? false : true;
                 record.IsMultiKey = dt.Rows[i]["复合主键"] is DBNull ? false : true;
@@ -168,29 +168,382 @@ namespace CodeFirst
                 record.MainClassName = dt.Rows[i]["主键类型"] is DBNull ? String.Empty : dt.Rows[i]["主键类型"].ToString();
                 record.MainClassProperty = dt.Rows[i]["主键属性"] is DBNull ? String.Empty : dt.Rows[i]["主键属性"].ToString();
                 record.RelationShip = dt.Rows[i]["关系"] is DBNull ? String.Empty : dt.Rows[i]["关系"].ToString();
+                record.Description = dt.Rows[i]["说明"] is DBNull ? String.Empty : dt.Rows[i]["说明"].ToString();
                 list.Add(record);
             }
             return list;
         }
 
+        public List<ServiceRecord> GetService(String path)
+        {
+            return null;
+        }
+
         #endregion
 
-        public void GenerateModel()
+        public void GenerateModel(List<PropertyRecord> properties,List<NavigationRecord> navigations)
+        {
+            foreach (var node in properties)
+            {
+                if (String.IsNullOrWhiteSpace(node.ClassMapping)) continue;
+                //manager.StartNewFile(node.ClassName+".cs"); 
+/*
+#>/***********************************************
+* auto-generated code from T4
+* 
+* ********************************************/
+
+/*
+using Infrastructure;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+
+namespace ERPS.Models
+{
+<#
+*/
+                if (node.ClassMapping.Equals("Enum"))
+                {
+/*
+#>
+    /// <summary>
+    /// <#=String.IsNullOrWhiteSpace(node.Description)?"":node.Description #>枚举
+    /// </summary>
+    public enum <#=node.ClassName #>
+    {
+<#
+*/
+                    int count = 0;
+                    foreach (var record in properties)
+                    {
+                        if (String.IsNullOrWhiteSpace(record.ClassMapping) && record.ClassName.Equals(node.ClassName))
+                        {
+                            if (count != 0)
+                            {
+                                
+/*
+#>,
+<#
+*/
+                            }
+/*
+#>
+        [Description("<#=String.IsNullOrWhiteSpace(record.Description)?"":record.Description #>")]
+        <#=record.PropertyName #><#  
+*/
+                            count++;
+                        }
+                    }
+/*
+#>
+
+    }
+}
+<#
+                    manager.EndBlock();
+*/
+                    continue;
+                }
+                //根据实体的基类写入表头
+                if (String.IsNullOrWhiteSpace(node.ClassBase))
+                {
+/*
+#>
+    /// <summary>
+    /// <#=node.ClassName #> 实体类
+    /// </summary>
+    [Serializable]
+    public partial class <#=node.ClassName #>:EntityBase,IAggregateRoot
+    {
+<#
+*/
+                }
+                else
+                {
+                    //code inherit from node.BaseClass
+/*
+#>
+    /// <summary>
+    /// <#=node.ClassName #>表实体类
+    /// </summary>
+    [Serializable]
+    public partial class <#=node.ClassName #>:<#=node.ClassBase #>,IAggregateRoot
+    {
+<#
+*/
+
+                }
+
+                //循环写入类型属性
+                foreach (var record in properties)
+                {
+                    //具有相同的类型名称、类型的映射基类为空的记录为类型的基本属性
+                    if (record.ClassName.Equals(node.ClassName)
+                        && String.IsNullOrWhiteSpace(record.ClassMapping))
+                    {
+/*
+#>
+        /// <summary>
+        /// <#=String.IsNullOrWhiteSpace(record.Description)?"":record.Description #>
+        /// </summary>
+        public <#=record.PropertyType #> <#=record.PropertyName #> {get;set;}
+
+<#
+*/
+
+                    }
+                }
+
+                foreach (var record in navigations)
+                {
+                    if (record.MainClassName != null && record.MainClassName.Equals(node.ClassName))
+                    {
+/*
+#>
+        ///<summary>
+        ///<#=String.IsNullOrWhiteSpace(record.Description)?"":record.Description #>
+        ///</summary>
+        public virtual IList<<#=record.FKClassName #>> <#=record.MainClassProperty #>{get;set;}
+
+<#
+*/
+                    }
+
+                    if (record.FKClassName != null && record.FKClassName.Equals(node.ClassName))
+                    {
+                        if (record.RelationShip.Equals("*"))
+                        {
+/*
+#>
+        ///<summary>
+        ///<#=String.IsNullOrWhiteSpace(record.Description)?"":record.Description #>
+        ///</summary>
+        public virtual IList<<#=record.MainClassName #>> <#=record.FKPropertyName #>{get;set;}
+
+<#
+*/
+                        }
+                        else
+                        {
+/*
+#>
+        ///<summary>
+        ///<#=String.IsNullOrWhiteSpace(record.Description)?"":record.Description #>
+        ///</summary>
+        public virtual <#=record.MainClassName #> <#=record.FKPropertyName #>{get;set;}
+
+<#
+*/
+                        }
+                    }
+                }
+/*
+#>
+        protected override void Validate()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+<#
+*/
+//manager.EndBlock();
+            }
+            //manager.Process(true);
+        }
+
+        public void GenerateDataContext(List<PropertyRecord> properties)
+        {
+ 
+        }
+
+        public void GenerateConfiguration(List<PropertyRecord> properties, List<NavigationRecord> navigations)
+        {
+            foreach (var node in properties)
+            {
+                if (String.IsNullOrWhiteSpace(node.ClassMapping)||node.ClassMapping.Equals("Enum")) continue;
+                //manager.StartNewFile(node.ClassName+".cs");
+/*
+#>/***********************************************
+* auto-generated code from T4
+* 
+* ********************************************/
+
+/*
+using ERPS.Models;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+
+namespace EPRS.Repository
+{
+    ///<summary>
+    ///<#=node.ClassName #> 实体类映射
+    ///</summary>
+    public class <#=node.ClassName #>Configuration:<#=node.ClassMapping #>Configuration<<#=node.ClassName #>>
+    {
+        public <#=node.ClassName #>Configuration()
+        {
+<#
+*/
+                int count = 0;
+                foreach (var record in properties)
+                {
+                    if (String.IsNullOrWhiteSpace(record.ClassMapping)
+                        &&!String.IsNullOrWhiteSpace(record.TableName)
+                        && record.ClassName.Equals(node.ClassName))
+                    {
+                        if (record.IsMultiKey&&record.IsKey)
+                        {
+                            if (count <= 0)
+                            {
+/*
+#>, k.<#=record.PropertyName #><#
+*/
+                            }
+                            else
+                            {
+/*
+#>
+            ToTable("<#=record.TableName #>");
+            HasKey(k => new { k.<#=record.PropertyName #><#
+*/
+                            }
+                            count++;
+                        }
+                        if (!record.IsMultiKey&&record.IsKey)
+                        {
+/*
+#>
+            ToTable("<#=record.TableName #>");
+            HasKey(e=>e.<#=record.PropertyName #>);
+<#
+*/
+                        }
+                    }
+                }
+                if (count > 0)
+                {
+/*
+#> });
+<#
+*/
+                }
+
+                foreach (var record in properties)
+                {
+                    if (String.IsNullOrWhiteSpace(record.ClassMapping)
+                        && record.ClassName.Equals(node.ClassName)
+                        )
+                    {
+/*
+#>
+            Property(e =>e.<#=record.PropertyName #>).HasColumnName("<#=record.PropertyName #>")<#
+*/
+                        if (record.IsIdentity)
+                        {
+/*
+#>.HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity)<#
+*/
+                        }
+                        if (record.pricison > 0)
+                        { }
+                        if (!String.IsNullOrWhiteSpace(record.Description))
+                        { }
+                        if (record.MaxLength > 0)
+                        {
+                            /*
+                            #>.HasMaxLength(<#=record.MaxLength #>)<#
+                             */
+                        }
+                        if (!String.IsNullOrWhiteSpace(record.FieldType))
+                        {
+                            /*
+                            #>.HasColumnType("<#=record.FieldType #>")<#
+                             */
+                        }
+                        if (record.IsNull)
+                        {
+                            /*
+                            #>.IsOptional()<# 
+                             */
+                        }
+                        else
+                        {
+                            /*
+                            #>.IsRequired()<#
+                             */
+                        }
+                        //特殊属性byte[] RowVersion
+                        if (record.PropertyName.Equals("RowVersion"))
+                        {
+                            /*
+                            #>.IsRowVersion()<# 
+                             */
+                        }
+                        /*
+                        #>;
+<#
+                         */
+                    }
+                }
+
+                foreach (var record in navigations)
+                {
+                    if (record.FKClassName.Equals(node.ClassName))
+                    {
+                        if (record.RelationShip.Equals("o"))
+                        {
+/*
+#>
+            HasOptional(e=>e.<#=record.FKPropertyName #>).WithMany(e=>e.<#=record.MainClassProperty #>).Map(e=>e.MapKey("<#=record.FKPropertyName #>Id"));<#
+    */
+                        }
+                        if (record.RelationShip.Equals("l"))
+                        {
+/*
+#>
+            HasRequired(e=>e.<#=record.FKPropertyName #>).WithMany(e=>e.<#=record.MainClassProperty #>).Map(e=>e.MapKey("<#=record.FKPropertyName #>Id"));<#
+    */
+                        }
+                        if (record.RelationShip.Equals("*"))
+                        {
+/*
+#>
+            HasMany(e => e.<#=record.FKPropertyName #>s).WithMany(e=>e.<#=record.MainClassProperty #>);<#
+*/
+                        }
+                    }
+                }
+/*
+#>
+
+        }
+    }
+}
+<#
+    */
+                //manager.EndBlock();
+            }
+            //manager.Process(true);
+        }
+
+        public void GenerateDTO(List<PropertyRecord> properties, List<NavigationRecord> navigations)
         { }
 
-        public void GenerateDataContext()
+        public void GenerateIRepository(List<PropertyRecord> properties)
         { }
 
-        public void GenerateConfiguration()
+        public void GenerateRepository(List<PropertyRecord> properties, List<NavigationRecord> navigations)
         { }
 
-        public void GenerateDTO()
-        { }
-
-        public void GenerateIRepository()
-        { }
-
-        public void GenerateRepository()
+        public void GenerateIService(List<PropertyRecord> properties, List<NavigationRecord> navigations)
         { }
     }
 
@@ -202,7 +555,7 @@ namespace CodeFirst
         public String PropertyName { get; set; }
         public String PropertyType { get; set; }
         public String TableName { get; set; }
-        public String FiledType { get; set; }
+        public String FieldType { get; set; }
         public bool IsKey { get; set; }
         public bool IsNull { get; set; }
         public bool IsIdentity { get; set; }
@@ -219,5 +572,9 @@ namespace CodeFirst
         public String FKClassName { get; set; }
         public String FKPropertyName { get; set; }
         public String RelationShip { get; set; }
+        public String Description { get; set; }
     }
+
+    class ServiceRecord
+    { }
 }

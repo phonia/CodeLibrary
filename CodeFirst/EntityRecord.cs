@@ -504,12 +504,13 @@ namespace CodeFirst
                             #>.IsRowVersion()<# 
                              */
                         }
-                        /*
-                        #>;
-                        <#
-                         */
+/*
+#>;
+<#
+    */
                     }
                 }
+
 
                 foreach (var record in list)
                 {
