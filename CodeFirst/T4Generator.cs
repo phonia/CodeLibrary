@@ -253,6 +253,7 @@ namespace ERPS.Models
 /*
 #>
     /// <summary>
+    /// <#=String.IsNullOrWhiteSpace(node.Description)?"":node.Description #>
     /// <#=node.ClassName #> 实体类
     /// </summary>
     [Serializable]
@@ -267,7 +268,8 @@ namespace ERPS.Models
 /*
 #>
     /// <summary>
-    /// <#=node.ClassName #>表实体类
+    /// <#=String.IsNullOrWhiteSpace(node.Description)?"":node.Description #>
+    /// <#=node.ClassName #> 实体类
     /// </summary>
     [Serializable]
     public partial class <#=node.ClassName #>:<#=node.ClassBase #>,IAggregateRoot
@@ -357,7 +359,78 @@ namespace ERPS.Models
 
         public void GenerateDataContext(List<PropertyRecord> properties)
         {
- 
+/*
+#>/***********************************************
+ * auto-generated code from T4
+ * 
+ * ********************************************/
+/*
+
+using ERPS.Models;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Text;
+
+namespace EPRS.Repository
+{
+    public class DataContext:DbContext,IDisposable
+    {
+
+        public DataContext() : base("DataContext") { 
+			base.Configuration.LazyLoadingEnabled = false;
+		}
+
+        public DataContext(String connectionStrings) : base(connectionStrings) { }
+<#
+*/
+            foreach (var record in properties)
+            {
+                if (record.ClassMapping.Equals("EntityType"))
+                {
+/*
+#>
+        ///<summary>
+        ///<#=record.PropertyName #>
+        ///</summary>
+        public DbSet<<#=record.ClassName #>> <#=record.ClassName #>Sets { get; set; }
+
+<#
+*/
+                }
+            }
+/*
+#>
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+			//Database.Delete("DataContext");
+<#
+*/
+            foreach (var record in properties)
+            {
+                if (record.ClassMapping.Equals("EntityType")
+                    || record.ClassMapping.Equals("ComplexType"))
+                {
+/*
+#>
+            modelBuilder.Configurations.Add(new <#=record.ClassName #>Configuration());
+<#
+*/
+                }
+            }
+/*
+#>
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<DataContext>());
+        }
+
+        public static void InitDataBase()
+        {
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<DataContext>());
+        }
+    }
+}
+*/
         }
 
         public void GenerateConfiguration(List<PropertyRecord> properties, List<NavigationRecord> navigations)
@@ -385,6 +458,7 @@ namespace EPRS.Repository
 {
     ///<summary>
     ///<#=node.ClassName #> 实体类映射
+    ///<#=String.IsNullOrWhiteSpace(node.Description)?"":node.Description #>
     ///</summary>
     public class <#=node.ClassName #>Configuration:<#=node.ClassMapping #>Configuration<<#=node.ClassName #>>
     {
@@ -440,7 +514,7 @@ namespace EPRS.Repository
                 {
                     if (String.IsNullOrWhiteSpace(record.ClassMapping)
                         && record.ClassName.Equals(node.ClassName)
-                        )
+                        &&!String.IsNullOrWhiteSpace(record.FieldType))
                     {
 /*
 #>
@@ -502,21 +576,24 @@ namespace EPRS.Repository
                         {
 /*
 #>
-            HasOptional(e=>e.<#=record.FKPropertyName #>).WithMany(e=>e.<#=record.MainClassProperty #>).Map(e=>e.MapKey("<#=record.FKPropertyName #>Id"));<#
+            HasOptional(e=>e.<#=record.FKPropertyName #>).WithMany(e=>e.<#=record.MainClassProperty #>).Map(e=>e.MapKey("<#=record.FKPropertyName #>Id"));
+<#
     */
                         }
                         if (record.RelationShip.Equals("l"))
                         {
 /*
 #>
-            HasRequired(e=>e.<#=record.FKPropertyName #>).WithMany(e=>e.<#=record.MainClassProperty #>).Map(e=>e.MapKey("<#=record.FKPropertyName #>Id"));<#
+            HasRequired(e=>e.<#=record.FKPropertyName #>).WithMany(e=>e.<#=record.MainClassProperty #>).Map(e=>e.MapKey("<#=record.FKPropertyName #>Id"));
+<#
     */
                         }
                         if (record.RelationShip.Equals("*"))
                         {
 /*
 #>
-            HasMany(e => e.<#=record.FKPropertyName #>s).WithMany(e=>e.<#=record.MainClassProperty #>);<#
+            HasMany(e => e.<#=record.FKPropertyName #>s).WithMany(e=>e.<#=record.MainClassProperty #>);
+<#
 */
                         }
                     }
@@ -535,13 +612,269 @@ namespace EPRS.Repository
         }
 
         public void GenerateDTO(List<PropertyRecord> properties, List<NavigationRecord> navigations)
-        { }
+        {
+            foreach (var node in properties)
+            {
+                if (String.IsNullOrWhiteSpace(node.ClassMapping)) continue;
+                //manager.StartNewFile(node.ClassName+".cs"); 
+/*
+#>/***********************************************
+* auto-generated code from T4
+* 
+* ********************************************/
+
+/*
+using Infrastructure;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+
+namespace ERPS.Models
+{
+<#
+*/
+                if (node.ClassMapping.Equals("Enum"))
+                {
+/*
+#>
+    /// <summary>
+    /// <#=String.IsNullOrWhiteSpace(node.Description)?"":node.Description #>枚举
+    /// <#=node.ClassName> DTO
+    /// </summary>
+    public enum <#=node.ClassName #>DTO
+    {
+<#
+*/
+                    int count = 0;
+                    foreach (var record in properties)
+                    {
+                        if (String.IsNullOrWhiteSpace(record.ClassMapping) && record.ClassName.Equals(node.ClassName))
+                        {
+                            if (count != 0)
+                            {
+                                
+/*
+#>,
+<#
+*/
+                            }
+/*
+#>
+        [Description("<#=String.IsNullOrWhiteSpace(record.Description)?"":record.Description #>")]
+        <#=record.PropertyName #><#  
+*/
+                            count++;
+                        }
+                    }
+/*
+#>
+
+    }
+}
+<#
+                    manager.EndBlock();
+*/
+                    continue;
+                }
+                //根据实体的基类写入表头
+                if (String.IsNullOrWhiteSpace(node.ClassBase))
+                {
+/*
+#>
+    /// <summary>
+    /// <#=node.ClassName #> DTO
+    /// <#=String.IsNullOrWhiteSpace(node.Description)?"":node.Description #>
+    /// </summary>
+    [Serializable]
+    public partial class <#=node.ClassName #>DTO
+    {
+<#
+*/
+                }
+                else
+                {
+                    //code inherit from node.BaseClass
+/*
+#>
+    /// <summary>
+    /// <#=node.ClassName #>DTO
+    /// <#=String.IsNullOrWhiteSpace(node.Description)?"":node.Description #>
+    /// </summary>
+    [Serializable]
+    public partial class <#=node.ClassName #>DTO:<#=node.ClassBase #>DTO
+    {
+<#
+*/
+
+                }
+
+                //循环写入类型属性
+                foreach (var record in properties)
+                {
+                    //具有相同的类型名称、类型的映射基类为空的记录为类型的基本属性
+                    if (record.ClassName.Equals(node.ClassName)
+                        && String.IsNullOrWhiteSpace(record.ClassMapping))
+                    {
+/*
+#>
+        /// <summary>
+        /// <#=String.IsNullOrWhiteSpace(record.Description)?"":record.Description #>
+        /// </summary>
+        public <#=String.IsNullOrWhiteSpace(record.TableName)?record.PropertyType+"DTO":record.PropertyType #> <#=record.PropertyName #> {get;set;}
+
+<#
+*/
+
+                    }
+                }
+/*
+#>
+    }
+}
+<#
+*/
+//manager.EndBlock();
+            }
+            //manager.Process(true);
+        }
 
         public void GenerateIRepository(List<PropertyRecord> properties)
-        { }
+        {
+            foreach (var record in properties)
+            {
+                if (String.IsNullOrWhiteSpace(record.ClassMapping)) continue;
+                PropertyRecord key = null;
+                foreach (var node in properties)
+                {
+                    if (node.ClassName.Equals(record.ClassName) && node.IsKey)
+                        key = node;
+                }
+                if (key == null) continue;
+                //manager.StartNewFile(record.ClassName + ".cs"); 
+/*
+#>/*********************************************
+* auto-generated code from T4
+* 
+* ********************************************/
+
+/*
+using Infrastructure;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace ERPS.Models
+{
+    ///<summary>
+    ///<#=record.ClassName #> 仓储接口
+    ///</summary>
+    public interface I<#=record.ClassName #>Repository : IRepository<<#=key.ClassName #>,<#=key.PropertyType #>> 
+    {
+
+    }
+}
+<#
+*/
+                //manager.EndBlock();
+            }
+            //manager.Process(true);
+        }
 
         public void GenerateRepository(List<PropertyRecord> properties, List<NavigationRecord> navigations)
-        { }
+        {
+            foreach (var record in properties)
+            {
+                if (String.IsNullOrWhiteSpace(record.ClassMapping)) continue;
+                PropertyRecord key = null;
+                foreach (var node in properties)
+                {
+                    if (node.ClassName.Equals(record.ClassName) && node.IsKey)
+                        key = node;
+                }
+                if (key == null) continue;
+/*
+                manager.StartNewFile(key.ClassName + ".cs"); 
+#>/*******************************************
+* auto-generated code from T4
+* 
+* ********************************************/
+
+/*
+using ERPS.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace EPRS.Repository
+{
+    ///<summary>
+    ///<#=record.ClassName #> 仓储类
+    ///</summary>
+    public partial class <#=record.ClassName #>Repository:EFRepository<<#=record.ClassName #>,<#=key.PropertyType #>>,I<#=record.ClassName #>Repository
+    {
+        public override void RemoveCascaded(<#=record.ClassName #> entity)
+        {
+            
+        }
+
+        public override void RemoveCascaded(<#=key.PropertyType #> id)
+        {
+            
+        }
+    }
+}
+<#
+*/
+                //manager.EndBlock();
+            }
+            //manager.Process(true);
+        }
+
+        public void GenerateAutoMapperStrapper(List<PropertyRecord> properties)
+        {
+/*
+#>/***********************************************
+ * auto-generated code from T4
+ * 
+ * ********************************************/
+/*
+
+using AutoMapper;
+using ERPS.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace EPRS.Service
+{
+    public class AutoMapperBootStrapper
+    {
+        public static void Start()
+        {
+<#
+*/
+            foreach (var node in properties)
+            {
+                if (String.IsNullOrWhiteSpace(node.ClassMapping)) continue;
+/*
+#>
+                Mapper.CreateMap<<#=node.ClassNmae #>, <#=node.ClassName #>DTO>();
+<#
+*/
+            }
+/*
+#>
+        }
+    }
+}
+<#
+*/
+        }
 
         public void GenerateIService(List<PropertyRecord> properties, List<NavigationRecord> navigations)
         { }
