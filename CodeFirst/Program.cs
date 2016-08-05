@@ -15,6 +15,17 @@ namespace CodeFirst
         static void Main(string[] args)
         {
             //List<EntityExcelRecord> list= EntityExcelRecord.GetAllRecordFromExcel(@"E:\Code\模型设计.xls");
+            Test t = new Test();
+        }
+    }
+
+    public class Test
+    {
+        public int i { get; set; }
+
+        public void Print()
+        {
+            Console.WriteLine("Print!");
         }
     }
 }
