@@ -12,6 +12,21 @@ namespace FileAutoGeneration
             //ClassFile cf = new ClassFile(new List<String>() { "test" }, @"F:\", new List<String>() { "using System;", "using System.Collections.Generic;", "using System.Linq;", "using System.Text;" },
             //    "Test");
             //cf.AutoGenerating();
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
         }
     }
 }
